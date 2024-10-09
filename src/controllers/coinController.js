@@ -17,7 +17,7 @@ async function getStat(req, res) {
     url: "https://api.coingecko.com/api/v3/simple/price",
     params: {
       ids: ids,
-      vs_currencies: "inr",
+      vs_currencies: "usd",
       include_market_cap: true,
       include_24hr_change: true,
     },
@@ -29,18 +29,18 @@ async function getStat(req, res) {
 
   try {
     const response = await axios.request(options);
-    if (response.data[ids] && response.data[ids].inr_24h_change) {
-      response.data[ids].inr_24h_change = parseFloat(
-        response.data[ids].inr_24h_change.toFixed(2)
+    if (response.data[ids] && response.data[ids].usd_24h_change) {
+      response.data[ids].usd_24h_change = parseFloat(
+        response.data[ids].usd_24h_change.toFixed(2)
       );
     }
 
     const coinData = response.data[ids];
 
     const myData = {
-      price: coinData.inr,
-      market_cap: coinData.inr_market_cap,
-      change: parseFloat(coinData.inr_24h_change.toFixed(2)),
+      price: coinData.usd,
+      market_cap: coinData.usd_market_cap,
+      change: parseFloat(coinData.usd_24h_change.toFixed(2)),
     };
     return res.status(200).json(myData);
   } catch (error) {
@@ -90,7 +90,7 @@ async function cronTask(coinId) {
     url: "https://api.coingecko.com/api/v3/simple/price",
     params: {
       ids: coinId, // e.g., 'bitcoin,ethereum,matic-network'
-      vs_currencies: "inr",
+      vs_currencies: "usd",
       include_market_cap: true,
       include_24hr_change: true,
       include_last_updated_at: true,
@@ -106,7 +106,7 @@ async function cronTask(coinId) {
     const coinData = response.data;
 
     for (let [coinId, data] of Object.entries(coinData)) {
-      const { inr, inr_market_cap, inr_24h_change, last_updated_at } = data;
+      const { usd, usd_market_cap, usd_24h_change, last_updated_at } = data;
 
       // Find the coin document by coinId (like 'bitcoin', 'ethereum', 'matic-network')
       let coin = await Coin.findOne({ coinId });
@@ -115,21 +115,21 @@ async function cronTask(coinId) {
         // If the coin document doesn't exist, create it
         coin = new Coin({
           coinId,
-          price: inr,
-          market_cap: inr_market_cap,
-          inr_24h_change: inr_24h_change,
+          price: usd,
+          market_cap: usd_market_cap,
+          usd_24h_change: usd_24h_change,
           last_updated: last_updated_at,
         });
       } else {
         // Update the fields
         coin.price = inr; // Latest price
         coin.market_cap = inr_market_cap;
-        coin.usd_24h_change = parseFloat(inr_24h_change.toFixed(2)); // Keep 2 decimal places for change
+        coin.usd_24h_change = parseFloat(usd_24h_change.toFixed(2)); // Keep 2 decimal places for change
         coin.last_updated = last_updated_at;
       }
 
       // Add the current price to the prices array (ensure it's capped at 100 prices)
-      coin.prices.push({ price: inr });
+      coin.prices.push({ price: usd });
 
       await coin.save();
     }
