@@ -26,21 +26,20 @@ const coinSchema = new mongoose.Schema({
         timestamp: { type: Date, default: Date.now }
       }
     ],
-    validate: [arrayLimit, '{PATH} exceeds the limit of 100']
+    
   }
 });
 
-function arrayLimit(val) {
-  return val.length <= 100;
-}
 
 
-coinSchema.pre('save', function (next) {
-  if (this.prices.length > 100) {
-    this.prices.shift(); 
-  }
-  next();
+coinSchema.pre('save', function(next) {
+    // Ensure the prices array has only the latest 100 prices before saving
+    if (this.prices.length > 25) {
+      this.prices = this.prices.slice(-25); // Keep only the last 100 prices
+    }
+    next();
 });
+  
 
 const Coin = mongoose.model('Coin', coinSchema);
 
