@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-
+const coinRoute = require('./routes/coinRoute');
 
 
 const connectDB = async () => {
@@ -19,6 +19,8 @@ connectDB();
 app.get('/', (req, res) => {
   res.send('Hello World! From KoinX task');
 });
+
+app.use('/api', coinRoute);
 
 
 module.exports = app;
