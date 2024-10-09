@@ -1,12 +1,13 @@
 require("dotenv").config();
 const Coin = require("../models/coinSchema");
 const axios = require("axios");
+const {deviationServices} = require('../services/coinService')
 
 async function getStat(req,res){
     const { ids } = req.query; // Expecting coinId as a query parameter
 
   if (!ids) {
-    return res.status(400).json({ error: 'Missing required query parameter: coinId' });
+    return res.status(400).json({ error: 'Missing required query parameter: ids' });
   }
 
   const options = {
@@ -48,6 +49,31 @@ async function getStat(req,res){
       details: error.message
     });
   }
+}
+
+
+async function getDeviation(req,res){
+    const { ids } = req.query; // Expecting coinId as a query parameter
+    if (!ids) {
+        return res.status(400).json({ error: 'Missing required query parameter: ids' });
+    }
+
+    try{
+    const stdDev = await deviationServices(ids);
+    if(stdDev == null){
+       res.status(404).send("Error calculating Deviation")
+    }else{
+        const obj = {
+            deviation: stdDev
+        }
+        res.status(200).json(obj);
+    }
+    
+    
+    }catch(error){
+        console.error('Error fetching deviation:', error);
+    }
+
 }
 
 
@@ -114,5 +140,6 @@ async function cronTask(coinId) {
 
 module.exports = {
     getStat,
+    getDeviation,
     cronTask
 }
