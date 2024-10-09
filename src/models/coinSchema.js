@@ -13,7 +13,7 @@ const coinSchema = new mongoose.Schema({
       market_cap: { 
         type: Number 
       },  
-      usd_24h_change: { 
+      inr_24h_change: { 
         type: Number 
       },
       last_updated: { 
