@@ -34,8 +34,8 @@ const coinSchema = new mongoose.Schema({
 
 coinSchema.pre('save', function(next) {
     // Ensure the prices array has only the latest 100 prices before saving
-    if (this.prices.length > 25) {
-      this.prices = this.prices.slice(-25); // Keep only the last 100 prices
+    if (this.prices.length > 100) {
+      this.prices = this.prices.slice(-100); // Keep only the last 100 prices
     }
     next();
 });
