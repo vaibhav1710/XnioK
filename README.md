@@ -30,6 +30,7 @@ Develop a server side application using Node.js and MongoDB and complete the fol
    DATABASE_URL = <your_mongodb_atlas_uri>
    PORT = 3000
    API_KEY = <your_coingecko_api_key>
+   CRON_SCHEDULE="* */2 * * *" // 2 hr
 
 4. Run the application in development mode.
    ```bash
