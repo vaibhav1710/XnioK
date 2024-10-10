@@ -17,8 +17,10 @@ const connectDB = async () => {
 
 connectDB();
 
+const scheduledTime = process.env.CRON_SCHEDULE || "0 */2 * * *"; // Fallback to 2 hr if not provided
+
 const job = CronJob.from({
-  cronTime: "0 */2 * * *",
+  cronTime: scheduledTime,
   onTick: async function () {
     const ids = "bitcoin,ethereum,matic-network";
     const data = await cronTask(ids);

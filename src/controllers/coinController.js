@@ -65,7 +65,7 @@ async function getDeviation(req, res) {
   try {
     const stdDev = await deviationServices(ids);
     if (stdDev == null) {
-      res.status(404).send("Error calculating Deviation");
+      res.status(404).send("Error calculating Deviation as it may be null");
     } else {
       const obj = {
         deviation: stdDev,
