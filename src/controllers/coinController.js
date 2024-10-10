@@ -1,7 +1,7 @@
 require("dotenv").config();
 const Coin = require("../models/coinSchema");
 const axios = require("axios");
-const { deviationServices } = require("../services/coinService");
+const { deviationServices, cronService } = require("../services/coinService");
 
 async function getStat(req, res) {
   const { ids } = req.query; // Expecting coinId as a query parameter
@@ -104,36 +104,8 @@ async function cronTask(coinId) {
   try {
     const response = await axios.request(options);
     const coinData = response.data;
-
-    for (let [coinId, data] of Object.entries(coinData)) {
-      const { usd, usd_market_cap, usd_24h_change, last_updated_at } = data;
-
-      // Find the coin document by coinId (like 'bitcoin', 'ethereum', 'matic-network')
-      let coin = await Coin.findOne({ coinId });
-
-      if (!coin) {
-        // If the coin document doesn't exist, create it
-        coin = new Coin({
-          coinId,
-          price: usd,
-          market_cap: usd_market_cap,
-          usd_24h_change: usd_24h_change,
-          last_updated: last_updated_at,
-        });
-      } else {
-        // Update the fields
-        coin.price = inr; // Latest price
-        coin.market_cap = inr_market_cap;
-        coin.usd_24h_change = parseFloat(usd_24h_change.toFixed(2)); // Keep 2 decimal places for change
-        coin.last_updated = last_updated_at;
-      }
-
-      // Add the current price to the prices array (ensure it's capped at 100 prices)
-      coin.prices.push({ price: usd });
-
-      await coin.save();
-    }
-    return "Successfully Added";
+    const data = await cronService(coinData);
+    return data.message;
   } catch (error) {
     console.error("Error fetching coin stats:", error);
 
