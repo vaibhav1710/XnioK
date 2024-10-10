@@ -18,7 +18,7 @@ const connectDB = async () => {
 connectDB();
 
 const job = CronJob.from({
-  cronTime: "*/30 * * * * *",
+  cronTime: "0 */2 * * *",
   onTick: async function () {
     const ids = "bitcoin,ethereum,matic-network";
     const data = await cronTask(ids);
