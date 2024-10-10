@@ -12,6 +12,32 @@ Develop a server side application using Node.js and MongoDB and complete the fol
 ## Task 3
   Implement an API, /deviation, that will return the standard deviation of the price of the requested cryptocurrency for the last 100 records stored by the background service in the database.
 
+## Setup
+
+### Clone the repository
+
+1. Clone the repository and navigate to the project directory:
+   ```bash
+   git clone <your-repository-url>
+   cd <your-repository-folder>
+
+2. Install the dependencies
+   ```bash
+   npm install      
+
+3. Create a .env file in the root of the project to define environment variables. Here's an example of what you should add to the .env file
+   ```bash
+   DATABASE_URL = <your_mongodb_atlas_uri>
+   PORT = 3000
+   API_KEY = <your_coingecko_api_key>
+
+4. Run the application in development mode.
+   ```bash
+   npm run dev
+
+ The server should now be running at http://localhost:3000.   
+  
+
 ## Endpoints
 
 ### Base URL
