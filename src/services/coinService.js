@@ -9,9 +9,9 @@ async function deviationServices(ids) {
       const prices = coin.prices
         .slice(-100)
         .map((priceEntry) => priceEntry.price);
-      console.log(prices);
+     // console.log(prices);
       const stdDev = calculateStandardDeviation(prices); // Calculate standard deviation
-      console.log(stdDev);
+     // console.log(stdDev);
       return stdDev; // Return the result
     } else {
       return null;

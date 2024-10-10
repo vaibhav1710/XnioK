@@ -23,7 +23,7 @@ async function getStat(req, res) {
     },
     headers: {
       accept: "application/json",
-      "x-cg-demo-api-key": "CG-gX79EPPBzUHoHiL48tMxgkVZ",
+      "x-cg-demo-api-key": process.env.API_KEY,
     },
   };
 
@@ -97,7 +97,7 @@ async function cronTask(coinId) {
     },
     headers: {
       accept: "application/json",
-      "x-cg-demo-api-key": "CG-gX79EPPBzUHoHiL48tMxgkVZ",
+      "x-cg-demo-api-key": process.env.API_KEY,
     },
   };
 
